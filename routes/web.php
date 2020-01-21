@@ -28,8 +28,14 @@ $router->get('checkout/{id}', 'CheckoutController@show');
 $router->put('checkout/{id}', 'CheckoutController@update');
 $router->delete('checkout/{id}', 'CheckoutController@destroy');
 
-$router->get('product', 'ProductController@index');
+// Payment
 $router->get('payment', 'PaymentController@index');
+$router->post('payment', 'PaymentController@store');
+$router->get('payment/{id}', 'PaymentController@show');
+$router->put('payment/{id}', 'PaymentController@update');
+$router->delete('payment/{id}', 'PaymentController@destroy');
+
+$router->get('product', 'ProductController@index');
 $router->get('pengiriman', 'PengirimanController@index');
 $router->get('user', 'UserController@index');
 $router->get('troli', 'TroliController@index');

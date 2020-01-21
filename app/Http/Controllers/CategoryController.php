@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller {
     public function index() {
+
+    
         $category = Category::OrderBy("id", "DESC")->paginate(10);
 
         $output = [
