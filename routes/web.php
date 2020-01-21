@@ -14,3 +14,7 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+$router->get('category', 'CategoryController@index');
+$router->get('product', 'ProductController@index');
+$router->get('payment', 'PaymentController@index');
+$router->get('pengiriman', 'PengirimanController@index');
