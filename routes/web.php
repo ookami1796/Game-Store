@@ -14,10 +14,22 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+// Category
 $router->get('category', 'CategoryController@index');
+$router->post('category', 'CategoryController@store');
+$router->get('category/{id}', 'CategoryController@show');
+$router->put('category/{id}', 'CategoryController@update');
+$router->delete('category/{id}', 'CategoryController@destroy');
+
+// Checkout
+$router->get('checkout', 'CheckoutController@index');
+$router->post('checkout', 'CheckoutController@store');
+$router->get('checkout/{id}', 'CheckoutController@show');
+$router->put('checkout/{id}', 'CheckoutController@update');
+$router->delete('checkout/{id}', 'CheckoutController@destroy');
+
 $router->get('product', 'ProductController@index');
 $router->get('payment', 'PaymentController@index');
 $router->get('pengiriman', 'PengirimanController@index');
 $router->get('user', 'UserController@index');
 $router->get('troli', 'TroliController@index');
-$router->get('checkout', 'CheckoutController@index');
