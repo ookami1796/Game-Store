@@ -19,6 +19,19 @@ class CheckoutController extends Controller {
     }
     public function store(Request $request){
         $input = $request->all();
+        $validationRules = [
+            'id_user' => 'required',
+            'id_troli' => 'required',
+            'id_pembayaran' => 'required',
+            'id_ekspedisi' => 'required',
+            'durasi' => 'required|in:Instan,Next Day,Regular(2 - 3 hari)'
+        ];
+
+        $validator = \Validator::make($input, $validationRules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
         $chekout = Checkout::create($input);
 
         return response()->json($chekout, 200);
@@ -42,6 +55,19 @@ class CheckoutController extends Controller {
 
         if (!$chekout) {
             abort(404);
+        }
+        $validationRules = [
+            'id_user' => 'required',
+            'id_troli' => 'required',
+            'id_pembayaran' => 'required',
+            'id_ekspedisi' => 'required',
+            'durasi' => 'required|in:Instan,Next Day,Regular(2 - 3 hari)'
+        ];
+
+        $validator = \Validator::make($input, $validationRules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
         }
 
         $chekout->fill($input);
