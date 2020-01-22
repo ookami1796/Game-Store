@@ -18,6 +18,15 @@ class PaymentController extends Controller {
     }
     public function store(Request $request){
         $input = $request->all();
+        $validationRules = [
+            'method' => 'required',
+        ];
+
+        $validator = \Validator::make($input, $validationRules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
         $payment = Payment::create($input);
 
         return response()->json($payment, 200);
@@ -41,6 +50,15 @@ class PaymentController extends Controller {
 
         if (!$payment) {
             abort(404);
+        }
+        $validationRules = [
+            'method' => 'required',
+        ];
+
+        $validator = \Validator::make($input, $validationRules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
         }
 
         $payment->fill($input);
