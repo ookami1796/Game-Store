@@ -35,7 +35,33 @@ $router->get('payment/{id}', 'PaymentController@show');
 $router->put('payment/{id}', 'PaymentController@update');
 $router->delete('payment/{id}', 'PaymentController@destroy');
 
-$router->get('product', 'ProductController@index');
+//Pengiriman
 $router->get('pengiriman', 'PengirimanController@index');
+$router->post('pengiriman', 'PengirimanController@store');
+$router->get('pengiriman/{id}', 'PengirimanController@show');
+$router->put('pengiriman/{id}', 'PengirimanController@update');
+$router->delete('pengiriman/{id}', 'PengirimanController@destroy');
+
+//User
 $router->get('user', 'UserController@index');
+$router->post('user', 'UserController@store');
+$router->get('user/{id}', 'UserController@show');
+$router->put('user/{id}', 'UserController@update');
+$router->delete('user/{id}', 'UserController@destroy');
+
+//Product
+$router->get('product', 'ProductController@index');
+$router->post('product', 'ProductController@store');
+$router->get('product/{id}', 'ProductController@show');
+$router->put('product/{id}', 'ProductController@update');
+$router->delete('product/{id}', 'ProductController@destroy');
+
+//Troli
+$router->get('troli', 'TroliController@index');
+$router->post('troli', 'TroliController@store');
+$router->get('troli/{id}', 'TroliController@show');
+$router->put('troli/{id}', 'TroliController@update');
+$router->delete('troli/{id}', 'TroliController@destroy');
+
+$router->get('product', 'ProductController@index');
 $router->get('troli', 'TroliController@index');
