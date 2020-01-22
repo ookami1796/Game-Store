@@ -9,7 +9,7 @@ class CategoryController extends Controller {
     public function index() {
 
     
-        $category = Category::OrderBy("id", "DESC")->paginate(10);
+        $category = Category::OrderBy("id", "DESC")->paginate(2)->toArray();
 
         $output = [
             "message" => "category",
@@ -21,8 +21,17 @@ class CategoryController extends Controller {
 
     public function store(Request $request){
         $input = $request->all();
-        $category = Category::create($input);
+        $validationRules = [
+            'nama' => 'required'
+        ];
 
+        $validator = \Validator::make($input, $validationRules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $category = Category::create($input);
         return response()->json($category, 200);
     }
 
@@ -44,6 +53,16 @@ class CategoryController extends Controller {
 
         if (!$category) {
             abort(404);
+        }
+
+        $validationRules = [
+            'nama' => 'required'
+        ];
+
+        $validator = \Validator::make($input, $validationRules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
         }
 
         $category->fill($input);

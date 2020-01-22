@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller {
     public function index() {
-        $payment = Payment::OrderBy("id", "DESC")->paginate(10);
+        $payment = Payment::OrderBy("id", "DESC")->paginate(2)->toArray();
 
         $output = [
             "message" => "payment",
