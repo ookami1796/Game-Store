@@ -44,7 +44,6 @@ $router->delete('pengiriman/{id}', 'PengirimanController@destroy');
 
 //User
 $router->get('user', 'UserController@index');
-$router->post('user', 'UserController@store');
 $router->get('user/{id}', 'UserController@show');
 $router->put('user/{id}', 'UserController@update');
 $router->delete('user/{id}', 'UserController@destroy');
@@ -65,3 +64,7 @@ $router->delete('troli/{id}', 'TroliController@destroy');
 
 $router->get('product', 'ProductController@index');
 $router->get('troli', 'TroliController@index');
+
+// $router->group(['prefix' => 'auth'], function() use ($router){
+//     $router->post('/register', 'AuthController@register');
+// });
