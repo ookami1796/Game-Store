@@ -18,7 +18,7 @@ class CreateUserTable extends Migration
             $table->string('nama',255);
             $table->string('username',255)->unique('username_unique');
             $table->string('password',255);
-            $table->integer('no_telp');
+            $table->string('no_telp', 12);
             $table->string('photo',255);
             $table->enum('role',array('admin','pelanggan'))->default('pelanggan');
             $table->text('alamat',65535);

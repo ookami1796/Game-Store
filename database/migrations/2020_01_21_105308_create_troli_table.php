@@ -17,8 +17,6 @@ class CreateTroliTable extends Migration
             $table->bigIncrements('id');
             
             $table->integer('id_user')->index('id_user_foreign');
-            $table->integer('id_produk')->index('id_produk_foreign');
-            $table->integer('jumlah_produk');
             $table->timestamps();
 
         });

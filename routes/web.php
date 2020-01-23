@@ -14,6 +14,14 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+
+$router->group(['prefix' => 'auth'], function() use ($router){
+    $router->post('/register', 'UserController@register');
+    $router->post('/login', 'UserController@login');
+});
+
+$router->group(['middleware' => ['auth']],  function ($router){
 // Category
 $router->get('category', 'CategoryController@index');
 $router->post('category', 'CategoryController@store');
@@ -57,14 +65,6 @@ $router->delete('product/{id}', 'ProductController@destroy');
 
 //Troli
 $router->get('troli', 'TroliController@index');
-$router->post('troli', 'TroliController@store');
-$router->get('troli/{id}', 'TroliController@show');
-$router->put('troli/{id}', 'TroliController@update');
-$router->delete('troli/{id}', 'TroliController@destroy');
-
-$router->get('product', 'ProductController@index');
-$router->get('troli', 'TroliController@index');
-
-// $router->group(['prefix' => 'auth'], function() use ($router){
-//     $router->post('/register', 'AuthController@register');
-// });
+$router->put('troli', 'TroliController@update');
+$router->delete('troli/product/{id_produk}', 'TroliController@deleteProduct');
+});
