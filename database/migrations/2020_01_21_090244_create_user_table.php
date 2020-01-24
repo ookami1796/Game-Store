@@ -19,7 +19,7 @@ class CreateUserTable extends Migration
             $table->string('username',255)->unique('username_unique');
             $table->string('password',255);
             $table->string('no_telp', 12);
-            $table->string('photo',255);
+            $table->string('photo',255)->nullable();
             $table->enum('role',array('admin','pelanggan'))->default('pelanggan');
             $table->text('alamat',65535);
             $table->timestamps();

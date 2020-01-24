@@ -19,30 +19,36 @@ class UserController extends Controller {
     }
     public function register(Request $request){
         $input = $request->all();
-        $validationRules = [
+        $this->validate($request, [
             'nama' => 'required',
-            'username' => 'required',
+            'username' => 'required|email',
             'password' => ' required',
             'no_telp' => 'required',
-            'photo' => 'required',
             'role' => ' required|in:admin,pelanggan',
             'alamat' => 'required'
-        ];
-
-        $validator = \Validator::make($input, $validationRules);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
+        ]);
 
         $user = new User;
         $user->nama = $request->input('nama');
         $user->username = $request->input('username');
         $plainPassword = $request->input('password');
         $user->password = app('hash')->make($plainPassword);
-        $user->nama = $request->input('nama');
         $user->no_telp = $request->input('no_telp');
-        $user->photo = $request->input('photo');
+
+        if ($request->hasFile('photo')) {
+            $firstName = str_replace(' ','_', $request->input('nama'));
+            $lastName = str_replace(' ','_', $request->input('username'));
+
+            $imgName = $firstName . '_' . $lastName;
+            $request->file('photo')->move(storage_path('uploads/image_user'), $imgName);
+
+            $current_image_path = storage_path('avatar') . '/' . $user->photo;
+            if (file_exists($current_image_path)) {
+                unlink($current_image_path);
+            }
+
+            $user->photo = $imgName;
+        }
         $user->role = $request->input('role');
         $user->alamat = $request->input('alamat');
         $user->save();        
@@ -51,17 +57,10 @@ class UserController extends Controller {
     public function login(Request $request){
         $input = $request->all();
 
-        $validationRules = [
+        $this->validate($request, [
             'username' => 'required',
             'password' => ' required',
-        ];
-
-        $validator =\Validator::make($input, $validationRules);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
+        ]);
         $credentials = $request->only(['username', 'password']);
 
         if (! $token = Auth::attempt($credentials)) {
@@ -74,6 +73,17 @@ class UserController extends Controller {
             'expires_in' => Auth::factory()->getTTL() * 60 * 24
         ], 200);
 
+    }
+
+    public function getImage($imageName){
+        $imagePath = storage_path('uploads/image_user') . '/' . $imageName;
+        if (file_exists($imagePath)) {
+            $file = file_get_contents($imagePath);
+            return response($file, 200)->header('Content-Type', 'image/jpeg');
+        }
+        return response()->json(array(
+            "message" => "Image not found"
+        ), 401);
     }
 
     public function show($id){
@@ -96,7 +106,7 @@ class UserController extends Controller {
             abort(404);
         }
 
-        $validationRules = [
+        $this->validate($request, [
             'nama' => 'required',
             'username' => 'required',
             'password' => ' required',
@@ -104,15 +114,7 @@ class UserController extends Controller {
             'photo' => 'required',
             'role' => ' required|in:admin,pelanggan',
             'alamat' => 'required'
-            
-        ];
-
-        $validator = \Validator::make($input, $validationRules);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
+        ]);
         $user->fill($input);
         $plainPassword = $request->input('password');
         $user->password = app('hash')->make($plainPassword);

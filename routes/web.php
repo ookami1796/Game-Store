@@ -53,6 +53,7 @@ $router->delete('pengiriman/{id}', 'PengirimanController@destroy');
 //User
 $router->get('user', 'UserController@index');
 $router->get('user/{id}', 'UserController@show');
+$router->get('user/image/{imageName}', 'UserController@getImage');
 $router->put('user/{id}', 'UserController@update');
 $router->delete('user/{id}', 'UserController@destroy');
 
