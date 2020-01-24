@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller {
     public function index() {
-        $product = Product::OrderBy("id", "DESC")->paginate(10);
+        $product = Product::with('category')->OrderBy("id", "DESC")->paginate(10);
 
         $output = [
             "message" => "product",
@@ -18,28 +18,20 @@ class ProductController extends Controller {
     }
     public function store(Request $request){
         $input = $request->all();
-        $validationRules = [
+        $this->validate($request, [
             'no_seri' => 'required',
             'nama_produk' => 'required',
-            'id_kategori' => ' required',
+            'id_kategori' => ' required|exists:kategori,id',
             'harga' => 'required',
             'photo_produk' => 'required',
             'deskripsi' => ' required',
-            
-        ];
-
-        $validator = \Validator::make($input, $validationRules);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
+        ]);
         $product = Product::create($input);
         return response()->json($product, 200);
     }
 
     public function show($id){
-        $product = Product::find($id);
+        $product = Product::with('category')->find($id);
 
         if(!$product){
             abort(404);
@@ -58,22 +50,14 @@ class ProductController extends Controller {
             abort(404);
         }
 
-        $validationRules = [
+        $this->validate($request, [
             'no_seri' => 'required',
             'nama_produk' => 'required',
-            'id_kategori' => ' required',
+            'id_kategori' => ' required|exists:kategori,id',
             'harga' => 'required',
             'photo_produk' => 'required',
             'deskripsi' => ' required',
-            
-        ];
-
-
-        $validator = \Validator::make($input, $validationRules);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
+        ]);
 
         $product->fill($input);
         $product->save();

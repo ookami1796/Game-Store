@@ -21,15 +21,9 @@ class CategoryController extends Controller {
 
     public function store(Request $request){
         $input = $request->all();
-        $validationRules = [
-            'nama' => 'required'
-        ];
-
-        $validator = \Validator::make($input, $validationRules);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
+        $this->validate($request, [
+            'nama' => 'required',
+        ]);
 
         $category = Category::create($input);
         return response()->json($category, 200);
@@ -55,15 +49,9 @@ class CategoryController extends Controller {
             abort(404);
         }
 
-        $validationRules = [
-            'nama' => 'required'
-        ];
-
-        $validator = \Validator::make($input, $validationRules);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
+        $this->validate($request, [
+            'nama' => 'required',
+        ]);
 
         $category->fill($input);
         $category->save();
