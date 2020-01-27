@@ -115,9 +115,28 @@ class UserController extends Controller {
             'role' => ' required|in:admin,pelanggan',
             'alamat' => 'required'
         ]);
-        $user->fill($input);
+        $user->nama = $request->input('nama');
+        $user->username = $request->input('username');
         $plainPassword = $request->input('password');
         $user->password = app('hash')->make($plainPassword);
+        $user->no_telp = $request->input('no_telp');
+
+        if ($request->hasFile('photo')) {
+            $firstName = str_replace(' ','_', $request->input('nama'));
+            $lastName = str_replace(' ','_', $request->input('username'));
+
+            $imgName = $firstName . '_' . $lastName;
+            $request->file('photo')->move(storage_path('uploads/image_user'), $imgName);
+
+            $current_image_path = storage_path('avatar') . '/' . $user->photo;
+            if (file_exists($current_image_path)) {
+                unlink($current_image_path);
+            }
+
+            $user->photo = $imgName;
+        }
+        $user->role = $request->input('role');
+        $user->alamat = $request->input('alamat');
         $user->save();
 
         return response()->json($user, 200);

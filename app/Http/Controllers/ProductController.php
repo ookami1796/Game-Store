@@ -26,8 +26,39 @@ class ProductController extends Controller {
             'photo_produk' => 'required',
             'deskripsi' => ' required',
         ]);
-        $product = Product::create($input);
+        $product = new Product();
+        $product->no_seri = $request->input('no_seri');
+        $product->nama_produk = $request->input('nama_produk');
+        $product->id_kategori = $request->input('id_kategori');
+        $product->harga = $request->input('harga');
+        $product->deskripsi = $request->input('deskripsi');
+
+        if ($request->hasFile('photo_produk')) {
+            $firstName = str_replace(' ','_', $request->input('no_seri'));
+            $lastName = str_replace(' ','_', $request->input('nama_produk'));
+
+            $imgName = $firstName . '_' . $lastName;
+            $request->file('photo')->move(storage_path('uploads/image_produk'), $imgName);
+
+            $current_image_path = storage_path('avatar') . '/' . $product->photo_produk;
+            if (file_exists($current_image_path)) {
+                unlink($current_image_path);
+            }
+
+            $product->photo = $imgName;
+        }
+        $product->save();
         return response()->json($product, 200);
+    }
+    public function getImage($imageName){
+        $imagePath = storage_path('uploads/image_produk') . '/' . $imageName;
+        if (file_exists($imagePath)) {
+            $file = file_get_contents($imagePath);
+            return response($file, 200)->header('Content-Type', 'image/jpeg');
+        }
+        return response()->json(array(
+            "message" => "Image not found"
+        ), 401);
     }
 
     public function show($id){
@@ -36,7 +67,7 @@ class ProductController extends Controller {
         if(!$product){
             abort(404);
         }
-
+        
         return response()->json($product, 200);
     }
 
@@ -59,7 +90,26 @@ class ProductController extends Controller {
             'deskripsi' => ' required',
         ]);
 
-        $product->fill($input);
+        $product->no_seri = $request->input('no_seri');
+        $product->nama_produk = $request->input('nama_produk');
+        $product->id_kategori = $request->input('id_kategori');
+        $product->harga = $request->input('harga');
+        $product->deskripsi = $request->input('deskripsi');
+
+        if ($request->hasFile('photo_produk')) {
+            $firstName = str_replace(' ','_', $request->input('no_seri'));
+            $lastName = str_replace(' ','_', $request->input('nama_produk'));
+
+            $imgName = $firstName . '_' . $lastName;
+            $request->file('photo')->move(storage_path('uploads/image_produk'), $imgName);
+
+            $current_image_path = storage_path('avatar') . '/' . $product->photo_produk;
+            if (file_exists($current_image_path)) {
+                unlink($current_image_path);
+            }
+
+            $product->photo = $imgName;
+        }
         $product->save();
 
         return response()->json($product, 200);

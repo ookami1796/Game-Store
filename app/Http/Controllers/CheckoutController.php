@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller {
     public function index() {
-        $checkout = Checkout::where('id_user', Auth::user()->id)->with('troli.products')->paginate();
-
-
+        $checkout = Checkout::where('id_user', Auth::user()->id)->with('troli.products','ekspedisi','pembayaran')->paginate(2);
         return response()->json($checkout, 200);
     }
     public function store(Request $request){
