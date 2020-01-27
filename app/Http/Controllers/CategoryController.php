@@ -20,7 +20,16 @@ class CategoryController extends Controller {
     }
 
     public function store(Request $request){
+        
         $input = $request->all();
+         if(Gate::denies('admin', $category)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
+
+            ],403);
+        }
         $this->validate($request, [
             'nama' => 'required',
         ]);
@@ -35,6 +44,7 @@ class CategoryController extends Controller {
         if(!$category){
             abort(404);
         }
+       
 
         return response()->json($category, 200);
     }
@@ -47,6 +57,14 @@ class CategoryController extends Controller {
 
         if (!$category) {
             abort(404);
+        }
+        if(Gate::denies('admin', $category)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
+
+            ],403);
         }
 
         $this->validate($request, [
@@ -65,6 +83,14 @@ class CategoryController extends Controller {
 
         if(!$category){
             abort(404);
+        }
+        if(Gate::denies('admin', $category)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
+
+            ],403);
         }
 
         $category->delete();

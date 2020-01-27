@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Auth;
 class CheckoutController extends Controller {
     public function index() {
         $checkout = Checkout::where('id_user', Auth::user()->id)->with('troli.products','ekspedisi','pembayaran')->paginate(2);
+        if(Gate::denies('admin', $checkout)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
+
+            ],403);
+        }
         return response()->json($checkout, 200);
     }
     public function store(Request $request){
@@ -48,7 +56,14 @@ class CheckoutController extends Controller {
         if(!$chekout){
             abort(404);
         }
+        if(Gate::denies('admin', $checkout)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
 
+            ],403);
+        }
         return response()->json($chekout, 200);
     }
 }

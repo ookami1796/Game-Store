@@ -18,6 +18,14 @@ class ProductController extends Controller {
     }
     public function store(Request $request){
         $input = $request->all();
+        if(Gate::denies('admin', $product)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
+
+            ],403);
+        }
         $this->validate($request, [
             'no_seri' => 'required',
             'nama_produk' => 'required',
@@ -74,7 +82,14 @@ class ProductController extends Controller {
     public function update(Request $request, $id)
     {
         $input = $request->all();
+        if(Gate::denies('admin', $product)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
 
+            ],403);
+        }
         $product = Product::find($id);
 
         if (!$product) {
@@ -121,6 +136,14 @@ class ProductController extends Controller {
 
         if(!$product){
             abort(404);
+        }
+        if(Gate::denies('admin', $product)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
+
+            ],403);
         }
 
         $product->delete();

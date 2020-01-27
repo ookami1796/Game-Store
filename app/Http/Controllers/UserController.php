@@ -9,7 +9,14 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller {
     public function index() {
         $user = User::OrderBy("id", "DESC")->paginate(10);
+        if(Gate::denies('admin', $user)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
 
+            ],403);
+        }
         $output = [
             "message" => "user",
             "result" => $user
@@ -92,6 +99,14 @@ class UserController extends Controller {
         if(!$user){
             abort(404);
         }
+        if(Gate::denies('admin', $user)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
+
+            ],403);
+        }
 
         return response()->json($user, 200);
     }
@@ -148,6 +163,14 @@ class UserController extends Controller {
 
         if(!$user){
             abort(404);
+        }
+        if(Gate::denies('admin', $user)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
+
+            ],403);
         }
 
         $user->delete();

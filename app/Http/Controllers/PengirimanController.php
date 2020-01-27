@@ -18,6 +18,14 @@ class PengirimanController extends Controller {
     }
     public function store(Request $request){
         $input = $request->all();
+        if(Gate::denies('admin', $pengiriman)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
+
+            ],403);
+        }
         $validationRules = [
             'nama' => 'required',
             'no_resi' => 'required'
@@ -46,6 +54,14 @@ class PengirimanController extends Controller {
     public function update(Request $request, $id)
     {
         $input = $request->all();
+        if(Gate::denies('admin', $pengiriman)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
+
+            ],403);
+        }
 
         $pengiriman = Pengiriman::find($id);
 
@@ -76,6 +92,14 @@ class PengirimanController extends Controller {
 
         if(!$pengiriman){
             abort(404);
+        }
+        if(Gate::denies('admin', $pengiriman)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
+
+            ],403);
         }
 
         $pengiriman->delete();

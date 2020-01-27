@@ -35,5 +35,12 @@ class AuthServiceProvider extends ServiceProvider
                 return User::where('api_token', $request->input('api_token'))->first();
             }
         });
+        Gate::define('admin',function ($user, $product, $pengiriman, $checkout, $category, $payment, $troli){
+            if($user->role == 'admin'){
+                return true;
+            }else{
+                return false;
+            }
+        });
     }
 }

@@ -18,6 +18,14 @@ class PaymentController extends Controller {
     }
     public function store(Request $request){
         $input = $request->all();
+        if(Gate::denies('admin', $payment)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
+
+            ],403);
+        }
         $validationRules = [
             'method' => 'required',
         ];
@@ -51,6 +59,14 @@ class PaymentController extends Controller {
         if (!$payment) {
             abort(404);
         }
+        if(Gate::denies('admin', $payment)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
+
+            ],403);
+        }
         $validationRules = [
             'method' => 'required',
         ];
@@ -73,6 +89,14 @@ class PaymentController extends Controller {
 
         if(!$payment){
             abort(404);
+        }
+        if(Gate::denies('admin', $payment)){
+            return response()->json([
+                'success' => false,
+                'status'=>403,
+                'message' => 'You are unauthorized'
+
+            ],403);
         }
 
         $payment->delete();
