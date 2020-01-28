@@ -27,7 +27,7 @@ class ProductController extends Controller {
             ],403);
         }
         $this->validate($request, [
-            'no_seri' => 'required',
+            'no_seri' => 'required|unique:product',
             'nama_produk' => 'required',
             'id_kategori' => ' required|exists:kategori,id',
             'harga' => 'required',
@@ -46,14 +46,14 @@ class ProductController extends Controller {
             $lastName = str_replace(' ','_', $request->input('nama_produk'));
 
             $imgName = $firstName . '_' . $lastName;
-            $request->file('photo')->move(storage_path('uploads/image_produk'), $imgName);
+            $request->file('photo_produk')->move(storage_path('uploads/image_produk'), $imgName);
 
             $current_image_path = storage_path('avatar') . '/' . $product->photo_produk;
             if (file_exists($current_image_path)) {
                 unlink($current_image_path);
             }
 
-            $product->photo = $imgName;
+            $product->photo_produk = $imgName;
         }
         $product->save();
         return response()->json($product, 200);
@@ -97,7 +97,7 @@ class ProductController extends Controller {
         }
 
         $this->validate($request, [
-            'no_seri' => 'required',
+            'no_seri' => 'required|exists:product,no_seri',
             'nama_produk' => 'required',
             'id_kategori' => ' required|exists:kategori,id',
             'harga' => 'required',

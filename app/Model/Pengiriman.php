@@ -10,6 +10,6 @@ class Pengiriman extends Model {
 
     protected $fillable = array('nama', 'no_resi');
     public function ekspedisi(){
-        return $this->hasMany(Pengiriman::class,'id_pengiriman');
+        return $this->hasMany(Checkout::class,'id_ekspedisi');
     }
 }

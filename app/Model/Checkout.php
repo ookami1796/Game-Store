@@ -14,9 +14,9 @@ class Checkout extends Model {
         return $this->belongsTo(Troli::class,'id_troli');
     }
     public function pembayaran(){
-        return $this->belongsTo(Payment::class,'id_payment');
+        return $this->belongsTo(Payment::class,'id_pembayaran');
     }
     public function ekspedisi(){
-        return $this->belongsTo(Pengiriman::class,'id_pengiriman');
+        return $this->belongsTo(Pengiriman::class,'id_ekspedisi');
     }
 }

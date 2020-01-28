@@ -10,6 +10,6 @@ class Payment extends Model {
 
     protected $fillable = array('method');
     public function pembayaran(){
-        return $this->hasMany(Payment::class,'id_payment');
+        return $this->hasMany(Checkout::class,'id_pembayaran');
     }
 }
